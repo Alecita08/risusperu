@@ -51,6 +51,7 @@ html .mts path{fill:rgba(255,253,248,.18);stroke:#F9F6ED}
 html .wm .w1{color:#F9F6ED}html .wm .w2,.wm .w5{color:#F9F6ED}
 html .langs button{color:#F1EADB}
 html .wm .w2,.wm .w5{color:#FFFDF8}
+.mail-line a{color:#F4B731;font-weight:700;text-decoration:none;font-size:1.1rem;word-break:break-all}.mail-line a:hover{text-decoration:underline}
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
 body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:17px;line-height:1.6}
@@ -813,6 +814,7 @@ footer .wrap{align-items:center;display:flex;flex-wrap:wrap;justify-content:spac
         <div class="eyebrow" data-t="ct.eyebrow">Contacto</div>
         <h2 data-t="ct.h2">Una mano más, una sonrisa más.</h2>
         <p data-t="ct.p">¿Quieres colaborar, patrocinar o saber más? Escríbenos y te respondemos personalmente.</p>
+        <p class="mail-line"><a href="mailto:risusperu@gmail.com">✉️ risusperu@gmail.com</a></p>
       </div>
       <form class="form" id="contact-form" novalidate>
         <label for="f-name" data-t="fm.name">Nombre</label>
@@ -948,7 +950,7 @@ const d=Math.ceil((CAMPANA-new Date())/86400000);
 if(d>0) document.getElementById("days").textContent=d; else document.getElementById("countdown").hidden=true;
 
 // contact form (FormSubmit: llega al correo de RISUS con copia a nuestros correos)
-const FORM={to:"daalruro@googlemail.com", cc:["antonelladennert.p@gmail.com"]}; // p. ej. to:"risus.cajabamba@gmail.com", cc:["alejandra@…","antonella@…"]
+const FORM={to:"risusperu@gmail.com", cc:["daalruro@googlemail.com","antonelladennert.p@gmail.com"]}; // p. ej. to:"risus.cajabamba@gmail.com", cc:["alejandra@…","antonella@…"]
 document.getElementById("contact-form").addEventListener("submit",async e=>{
   e.preventDefault();const f=e.target,st=document.getElementById("f-status");
   if(!f.checkValidity()){st.textContent=T[lang]["fm.invalid"];f.reportValidity();return;}
