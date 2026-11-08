@@ -914,8 +914,11 @@ footer .wrap{align-items:center;display:flex;flex-wrap:wrap;justify-content:spac
 // Gastos: {fecha:"12/2026", concepto:{es:"…",de:"…",en:"…"}, comprobante:"boleta", tipo:"gasto", importe:0, moneda:"EUR"}
 // tipo: "aporte" (dinero recibido) o "gasto". Productos recibidos: PRODUCTOS_RECIBIDOS.
 const MOVIMIENTOS = [
-  {fecha:"11/2026", tipo:"aporte"} // donaciones: solo se cuentan, sin importe ni nombre
-  ,{fecha:"08/11/2026", tipo:"aporte"}
+  {fecha:"11/2026", tipo:"aporte", quien:"empresa"} // donaciones: solo se cuentan (persona/empresa), sin importe ni nombre
+  ,{fecha:"11/2026", tipo:"aporte", quien:"empresa"}
+  ,{fecha:"11/2026", tipo:"aporte", quien:"persona"}
+  ,{fecha:"11/2026", tipo:"aporte", quien:"persona"}
+  ,{fecha:"08/11/2026", tipo:"aporte", quien:"persona"}
 ];
 const PRODUCTOS_RECIBIDOS = 0;
 const KITS_LISTOS = 0, META_KITS = 40; // kits dentales armados / meta de la campaña
@@ -998,7 +1001,15 @@ function renderTx(){
   document.getElementById("st-buys").textContent=MOVIMIENTOS.filter(m=>m.tipo==="gasto").length;
   document.getElementById("st-items").textContent=PRODUCTOS_RECIBIDOS;
   const nAp=MOVIMIENTOS.filter(m=>m.tipo==="aporte").length, tc=document.getElementById("thanks-count");
-  if(tc){tc.hidden=!nAp; if(nAp) tc.textContent=(T[lang][nAp===1?"th.one":"th.many"]||T.es[nAp===1?"th.one":"th.many"]).replace("{n}",nAp);}
+  if(tc){tc.hidden=!nAp; if(nAp){
+    const nP=MOVIMIENTOS.filter(m=>m.tipo==="aporte"&&m.quien==="persona").length, nE=MOVIMIENTOS.filter(m=>m.tipo==="aporte"&&m.quien==="empresa").length;
+    const W={es:{p:["persona","personas"],e:["empresa","empresas"],t:"💛 Gracias a {x} que ya apoyan RISUS.",y:" y "},
+             de:{p:["Mensch","Menschen"],e:["Unternehmen","Unternehmen"],t:"💛 Danke an {x}, die RISUS bereits unterstützen.",y:" und "},
+             en:{p:["person","people"],e:["company","companies"],t:"💛 Thank you to {x} already supporting RISUS.",y:" and "}}[lang]||null;
+    if(W&&nP+nE===nAp){const parts=[];if(nP)parts.push(nP+" "+W.p[nP===1?0:1]);if(nE)parts.push(nE+" "+W.e[nE===1?0:1]);
+      const art=(lang==="es")?((nP===1&&!nE)?"la ":(nE===1&&!nP)?"la ":"las "):(lang==="de"?"die ":"the ");
+      tc.textContent=W.t.replace("{x}",art+parts.join(W.y));}
+    else tc.textContent=(T[lang][nAp===1?"th.one":"th.many"]||T.es[nAp===1?"th.one":"th.many"]).replace("{n}",nAp);}}
   const GASTOS=MOVIMIENTOS.filter(m=>m.tipo==="gasto");
   tb.closest("table").classList.toggle("is-empty",!GASTOS.length);
   if(!GASTOS.length){tb.innerHTML='<tr><td colspan="4" class="empty">'+T[lang]["tr.empty"]+'</td></tr>';return;}
